@@ -65,7 +65,7 @@ while True:
         if (current_price <= 10 ) :
             if not trade_placed:
                 direction = "call"
-                now = time.localtime()
+                now = time.time()
                 def get_remaining_seconds(x):
                   current_time = time.localtime()
                   current_minute = current_time.tm_min
@@ -104,7 +104,7 @@ while True:
         if (current_price >= 0 ) :
             if not trade_placed:
                 direction = "put"
-                now = time.localtime()
+                now = time.time()
                 def get_remaining_seconds(x):
                   current_time = time.localtime()
                   current_minute = current_time.tm_min
