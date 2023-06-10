@@ -48,7 +48,6 @@ handler = TA_Handler(
     timeout=None
 )
 while True:
-    then=int(time.time())
     current_price = API.get_candles("EURUSD-OTC", 60 * x, 1, time.time())[0]["close"]
     analysis = handler.get_analysis()
     ema = analysis.indicators["EMA100"]
