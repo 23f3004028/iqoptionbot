@@ -48,13 +48,13 @@ handler = TA_Handler(
     timeout=None
 )
 while True:
-    current_price = API.get_candles("EURUSD-OTC", 60 * x, 1, time.time())[0]["close"]
+    current_price = API.get_candles("EURUSD", 60 * x, 1, time.time())[0]["close"]
     analysis = handler.get_analysis()
     ema = analysis.indicators["EMA100"]
     #Uptrend
     # if (current_price > ema) and profit_result<30 and loss_result<1 :
     if (current_price > ema) :
-        candles = API.get_candles("EURUSD-OTC", 60 * x, 100, time.time())
+        candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
         df = pd.DataFrame(candles)        
         df['sma'] = df['close'].rolling(window=bollinger_length).mean()
@@ -62,7 +62,7 @@ while True:
         df['lower_band'] = df['sma'] - bollinger_deviation * df['std_dev']
         lower_band = df['lower_band'].iloc[-1]
         #balance_before = I_want_money.get_balance()
-        if (current_price <= 10 ) :
+        if (current_price <= lower_band ) :
             if not trade_placed:
                 direction = "call"
                 now = time.time()
@@ -86,7 +86,7 @@ while True:
                 else:
                     continue
                 
-                result, order_id = API.buy(amount, "EURUSD-OTC", direction, value)
+                result, order_id = API.buy(amount, "EURUSD", direction, value)
                 if result:
                     print("CALL Trade placed successfully at : ",now )
                     trade_placed = True
@@ -94,14 +94,14 @@ while True:
                     print("Error placing trade:")
     #downtrend
     elif (current_price <= ema) :
-        candles = API.get_candles("EURUSD-OTC", 60 * x, 100, time.time())
+        candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
         df = pd.DataFrame(candles)        
         df['sma'] = df['close'].rolling(window=bollinger_length).mean()
         df['std_dev'] = df['close'].rolling(window=bollinger_length).std()
         df['upper_band'] = df['sma'] + bollinger_deviation * df['std_dev']
         upper_band = df['upper_band'].iloc[-1]
-        if (current_price >= 0 ) :
+        if (current_price >= upper_band ) :
             if not trade_placed:
                 direction = "put"
                 now = time.time()
@@ -125,7 +125,7 @@ while True:
                 else:
                     continue
                
-                result, order_id = API.buy(amount, "EURUSD-OTC", direction, value)
+                result, order_id = API.buy(amount, "EURUSD", direction, value)
                 if result:
                     print("PUT Trade placed successfully at :",now)
                     trade_placed = True
