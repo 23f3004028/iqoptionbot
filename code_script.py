@@ -62,7 +62,7 @@ while True:
         df['lower_band'] = df['sma'] - bollinger_deviation * df['std_dev']
         lower_band = df['lower_band'].iloc[-1]
         #balance_before = I_want_money.get_balance()
-        if (current_price <= 100 ) :
+        if (current_price <= lower_band ) :
             if not trade_placed:
                 direction = "call"
                 now = time.time()
@@ -101,7 +101,7 @@ while True:
         df['std_dev'] = df['close'].rolling(window=bollinger_length).std()
         df['upper_band'] = df['sma'] + bollinger_deviation * df['std_dev']
         upper_band = df['upper_band'].iloc[-1]
-        if (current_price >= 0 ) :
+        if (current_price >= upper_band ) :
             if not trade_placed:
                 direction = "put"
                 now = time.time()
