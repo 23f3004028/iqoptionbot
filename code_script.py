@@ -54,6 +54,7 @@ while True:
     #Uptrend
     # if (current_price > ema) and profit_result<30 and loss_result<1 :
     if (current_price > ema) :
+        print("UP")
         candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
         df = pd.DataFrame(candles)        
@@ -94,6 +95,7 @@ while True:
                     print("Error placing trade:")
     #downtrend
     elif (current_price <= ema) :
+        print("DOWN")
         candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
         df = pd.DataFrame(candles)        
