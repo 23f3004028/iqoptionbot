@@ -50,17 +50,15 @@ handler = TA_Handler(
 start_time = time.time()
 i = 1
 while True:
-    elapsed_time = time.time() - start_time
-    if elapsed_time >= 300:
-        print(i)
-        i += 1
-        start_time = time.time()
     current_price = API.get_candles("EURUSD", 60 * x, 1, time.time())[0]["close"]
     analysis = handler.get_analysis()
     ema = analysis.indicators["EMA100"]
     #Uptrend
     # if (current_price > ema) and profit_result<30 and loss_result<1 :
     if (current_price > ema) :
+        elapsed_time = time.time() - start_time
+        status = f"UP-Running... - {elapsed_time:.2f}s"
+        print(status, end="\r")
         candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
         df = pd.DataFrame(candles)        
@@ -101,6 +99,9 @@ while True:
                     print("Error placing trade:")
     #downtrend
     elif (current_price <= ema) :
+        elapsed_time = time.time() - start_time
+        status = f"Down-Running... - {elapsed_time:.2f}s"
+        print(status, end="\r")
         candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
         df = pd.DataFrame(candles)        
