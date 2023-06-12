@@ -48,10 +48,12 @@ handler = TA_Handler(
     timeout=None
 )
 start_time = time.time()
+i = 1
 while True:
     elapsed_time = time.time() - start_time
     if elapsed_time >= 300:
-        print("Printing once every 5 minutes")
+        print(i)
+        i += 1
         start_time = time.time()
     current_price = API.get_candles("EURUSD", 60 * x, 1, time.time())[0]["close"]
     analysis = handler.get_analysis()
