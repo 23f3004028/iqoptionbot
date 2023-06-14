@@ -103,7 +103,7 @@ while True:
                 value = 4
             elif remaining_seconds >= 271 and remaining_seconds <= 330:
                 value = 5
-           else:
+            else:
                 continue
 
             order_id = place_trade("EURUSD", "call", value)
