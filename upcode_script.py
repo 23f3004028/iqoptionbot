@@ -156,4 +156,4 @@ while True:
             print("Trade result unknown.")
        
         trade_placed = False
-    time.sleep(0.8)
+    time.sleep(0.5)
