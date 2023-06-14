@@ -1,4 +1,3 @@
-hat are the logical difference between 
 from iqoptionapi.stable_api import IQ_Option
 import logging      
 import pandas as pd
