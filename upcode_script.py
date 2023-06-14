@@ -29,7 +29,7 @@ if not check:
     exit()
 print("Connection successful")
 #parameters
-bollinger_length = 20
+bollinger_length = 11
 bollinger_deviation = 2.3
 x = 5
 amount = 1
