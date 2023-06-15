@@ -48,6 +48,7 @@ handler = TA_Handler(
     timeout=None
 )
 start_time = time.time()
+i = 1
 while True:
     current_price = API.get_candles("EURUSD", 60 * x, 1, time.time())[0]["close"]
     analysis = handler.get_analysis()
