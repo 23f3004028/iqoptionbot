@@ -30,7 +30,7 @@ if not check:
 print("Connection successful")
 #parameters
 bollinger_length = 11
-bollinger_deviation = 2.3
+bollinger_deviation = 2
 x = 5
 amount = 1
 direction = ""
