@@ -8,7 +8,7 @@ import time
 import sys
 
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
-I_want_money=IQ_Option("arishisgay@gay.com","arishisgay@gay.com")
+I_want_money=IQ_Option("dharshaniitb@protonmail.com","Hi12345678#")
 #Default is "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36"
 header={"User-Agent":r"Mozilla/5.0 (X11; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0"}
 cookie={"I_want_money":"GOOD"}
@@ -18,21 +18,24 @@ I_want_money.connect()#connect to iqoption
 print(I_want_money.check_connect())
 I_want_money.connect()
 I_want_money.get_server_timestamp()
+MODE = "REAL"
 I_want_money.change_balance(MODE)
                         #MODE: "PRACTICE"/"REAL
 I_want_money.get_balance()
 
-API = IQ_Option("arishisgay@gay.com", "arishisgay@gay.com")
+API = IQ_Option("dharshaniitb@protonmail.com", "Hi12345678#")
 check, reason = API.connect()
 if not check:
     print("Connection failed. Reason: {}".format(reason))
     exit()
 print("Connection successful")
+k = I_want_money.get_balance()
+print(k)
 #parameters
 bollinger_length = 20
 bollinger_deviation = 2.3
 x = 5
-amount = 1
+amount = 55
 direction = ""
 balance_before = I_want_money.get_balance()
 balance_after = I_want_money.get_balance()
