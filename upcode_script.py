@@ -39,6 +39,7 @@ balance_after = I_want_money.get_balance()
 profit_result = 0
 loss_result = 0
 trade_placed = False
+value = 2
 #EmaHandler
 handler = TA_Handler(
     symbol="EURUSD",
