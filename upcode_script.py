@@ -12,7 +12,7 @@ I_want_money=IQ_Option("dharshanisnotgay@gmail.com","dharshanisnotgay@gmail.com"
 #Default is "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36"
 header={"User-Agent":r"Mozilla/5.0 (X11; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0"}
 cookie={"I_want_money":"GOOD"}
-MODE="PRACTICE"
+MODE="REAL"
 I_want_money.set_session(header,cookie)
 I_want_money.connect()#connect to iqoption
 print(I_want_money.check_connect())
@@ -56,6 +56,12 @@ while True:
     #Uptrend
     # if (current_price > ema) and profit_result<30 and loss_result<1 :
     if (current_price > ema) :
+        result, order_id = API.buy(amount, "EURUSD", "call" , value)
+        if result:
+            print("CALL Trade placed successfully at : ",now )
+            trade_placed = True
+        else:
+            print("Error placing trade:")
         elapsed_time = time.time() - start_time
         status = f"UP-Running... - {elapsed_time:.2f}s"
         print(status, end="\r")
@@ -99,6 +105,12 @@ while True:
                     print("Error placing trade:")
     #downtrend
     elif (current_price <= ema) :
+        result, order_id = API.buy(amount, "EURUSD", "put" , value)
+        if result:
+            print("CALL Trade placed successfully at : ",now )
+            trade_placed = True
+        else:
+            print("Error placing trade:")
         elapsed_time = time.time() - start_time
         status = f"Down-Running... - {elapsed_time:.2f}s"
         print(status, end="\r")
