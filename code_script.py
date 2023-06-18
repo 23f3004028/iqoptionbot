@@ -142,21 +142,21 @@ while True:
                 else:
                     print("Error placing trade:")
     if trade_placed and time.time() > now + remaining_seconds:
-       
+    
         trade_result = API.check_win_v3(order_id)
         balance_after = I_want_money.get_balance()
         if (balance_after > balance_before):
           profit_result = profit_result+1
           print("Win")
+          balance_before = I_want_money.get_balance()
         elif (balance_after < balance_before):
           loss_result = loss_result + 1
           print("Loss")
-        if trade_result == "win":
-            print("Trade won!")
-        elif trade_result == "loose":
-            print("Trade lost.")
-        else:
-            print("Trade result unknown.")
-       
+          balance_before = I_want_money.get_balance()
+          loss_result += 1
+        else :
+          print("Result Unknown")
         trade_placed = False
+    if loss_result > 3:
+      sys.exit()
     time.sleep(0.5)
