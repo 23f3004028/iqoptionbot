@@ -80,8 +80,8 @@ while True:
                   return remaining_seconds
                 remaining_seconds = get_remaining_seconds(x)
 
-                if remaining_seconds < 30:
-                    continue
+                if remaining_seconds >=31 and remaining_seconds <= 90:
+                    value = 1
                 elif remaining_seconds >= 91 and remaining_seconds <= 150:
                     value = 2
                 elif remaining_seconds >= 151 and remaining_seconds <= 210:
@@ -122,8 +122,8 @@ while True:
                   return remaining_seconds
                 remaining_seconds = get_remaining_seconds(x)
 
-                if remaining_seconds < 30:
-                    continue
+                if remaining_seconds >=31 and remaining_seconds <= 90:
+                    value = 1
                 elif remaining_seconds >= 91 and remaining_seconds <= 150:
                     value = 2
                 elif remaining_seconds >= 151 and remaining_seconds <= 210:
