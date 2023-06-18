@@ -158,5 +158,5 @@ while True:
           print("Result Unknown")
         trade_placed = False
     if loss_result > 3:
-      sys.exit()
+        sys.exit()
     time.sleep(0.5)
