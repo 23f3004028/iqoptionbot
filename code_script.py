@@ -148,15 +148,14 @@ while True:
         if (balance_after > balance_before):
           profit_result = profit_result+1
           print("Win")
-          balance_before = I_want_money.get_balance()
         elif (balance_after < balance_before):
           loss_result = loss_result + 1
           print("Loss")
-          balance_before = I_want_money.get_balance()
-          loss_result += 1
+         
         else :
           print("Result Unknown")
         trade_placed = False
+        balance_before = I_want_money.get_balance()
     if loss_result > 3:
         sys.exit()
     time.sleep(0.5)
