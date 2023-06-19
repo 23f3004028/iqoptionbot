@@ -164,6 +164,6 @@ while True:
           print(balance_before,",",balance_after)
         balance_before = I_want_money.get_balance()
         
-    if loss_result > 3:
+    if loss_result > 2:
         sys.exit()
     time.sleep(0.5)
