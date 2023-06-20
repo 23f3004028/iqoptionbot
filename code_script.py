@@ -49,6 +49,7 @@ handler = TA_Handler(
     interval="5m",
     timeout=None
 )
+print(bollinger_length,bollinger_deviation,amount)
 start_time = time.time()
 i = 1
 while True:
