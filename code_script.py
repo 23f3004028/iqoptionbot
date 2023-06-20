@@ -31,8 +31,8 @@ print("Connection successful")
 k = I_want_money.get_balance()
 print(k)
 #parameters
-bollinger_length = 20
-bollinger_deviation = 2.3
+bollinger_length = 27
+bollinger_deviation = 2.4
 x = 5
 amount = 1
 direction = ""
