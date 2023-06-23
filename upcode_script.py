@@ -16,14 +16,6 @@ def telegram_bot_sendtext(bot_message):
     response = requests.get(send_text)
     return response.json()
 
-i = 1
-while True:
-    telegram_bot_sendtext(i)
-    i += 1
-    time.sleep(1)
-
-
-
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
 I_want_money=IQ_Option("arishisgay@gay.com","arishisgay@gay.com")
 #Default is "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36"
@@ -38,13 +30,7 @@ I_want_money.get_server_timestamp()
 I_want_money.change_balance(MODE)
                         #MODE: "PRACTICE"/"REAL
 I_want_money.get_balance()
-def telegram_bot_sendtext(bot_message):
-    bot_token = '6283203048:AAGgOl-o6Itm3D1mw4_Omcf-g4t260vixN8'
-    bot_chatID = '1155462778'
-    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + \
-                '&parse_mode=MarkdownV2&text=' + str(bot_message)  # Convert i to a string
-    response = requests.get(send_text)
-    return response.json()
+
 API = IQ_Option("arishisgay@gay.com", "arishisgay@gay.com")
 check, reason = API.connect()
 if not check:
@@ -125,7 +111,7 @@ while True:
                     telegram_bot_sendtext("Error placing trade:")
 
     elif (current_price <= ema) :
-        bot_seconds = get_remaining_seconds(15)
+        bot_seconds = get_remaining_seconds(5)
         if 28<bot_seconds<29:
             elapsed_time = time.time() - start_time
             status = f"DOWN-Running... - {elapsed_time:.2f}s"
