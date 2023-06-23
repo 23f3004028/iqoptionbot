@@ -84,8 +84,8 @@ while True:
     analysis = handler.get_analysis()
     ema = analysis.indicators["EMA100"]
     if (current_price > ema) :
-        bot_seconds = get_remaining_seconds(15)
-        if bot_seconds :
+        bot_seconds = get_remaining_seconds(5)
+        if 28<bot_seconds<29:
             telegram_bot_sendtext()
         candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
@@ -123,7 +123,7 @@ while True:
 
     elif (current_price <= ema) :
         bot_seconds = get_remaining_seconds(15)
-        if bot_seconds :
+        if 28<bot_seconds<29:
             telegram_bot_sendtext()
         candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
