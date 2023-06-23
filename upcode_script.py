@@ -58,7 +58,7 @@ handler = TA_Handler(
     interval="5m",
     timeout=None
 )
-send_status_message(balance_before)
+telegram_bot_sendtext(balance_before)
 start_time = time.time()
 
 def get_remaining_seconds(x):
