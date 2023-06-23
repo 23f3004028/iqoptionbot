@@ -8,11 +8,11 @@ import time
 import sys
 
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
-I_want_money=IQ_Option("dharshanisnotgay@gmail.com","dharshanisnotgay@gmail.com")
+I_want_money=IQ_Option("arishisgay@gay.com","arishisgay@gay.com")
 #Default is "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36"
 header={"User-Agent":r"Mozilla/5.0 (X11; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0"}
 cookie={"I_want_money":"GOOD"}
-MODE="REAL"
+MODE="PRACTICE"
 I_want_money.set_session(header,cookie)
 I_want_money.connect()#connect to iqoption
 print(I_want_money.check_connect())
@@ -22,15 +22,17 @@ I_want_money.change_balance(MODE)
                         #MODE: "PRACTICE"/"REAL
 I_want_money.get_balance()
 
-API = IQ_Option("dharshanisnotgay@gmail.com", "dharshanisnotgay@gmail.com")
+API = IQ_Option("arishisgay@gay.com", "arishisgay@gay.com")
 check, reason = API.connect()
 if not check:
     print("Connection failed. Reason: {}".format(reason))
     exit()
 print("Connection successful")
+k = I_want_money.get_balance()
+print(k)
 #parameters
-bollinger_length = 11
-bollinger_deviation = 2
+bollinger_length = 27
+bollinger_deviation = 2.4
 x = 5
 amount = 1
 direction = ""
@@ -39,7 +41,6 @@ balance_after = I_want_money.get_balance()
 profit_result = 0
 loss_result = 0
 trade_placed = False
-value = 2
 #EmaHandler
 handler = TA_Handler(
     symbol="EURUSD",
@@ -48,6 +49,7 @@ handler = TA_Handler(
     interval="5m",
     timeout=None
 )
+print(bollinger_length,bollinger_deviation,amount)
 start_time = time.time()
 i = 1
 while True:
@@ -57,12 +59,6 @@ while True:
     #Uptrend
     # if (current_price > ema) and profit_result<30 and loss_result<1 :
     if (current_price > ema) :
-        result, order_id = API.buy(amount, "EURUSD", "call" , value)
-        if result:
-            print("CALL Trade placed successfully at : ",now )
-            trade_placed = True
-        else:
-            print("Error placing trade:")
         elapsed_time = time.time() - start_time
         status = f"UP-Running... - {elapsed_time:.2f}s"
         print(status, end="\r")
@@ -85,8 +81,8 @@ while True:
                   return remaining_seconds
                 remaining_seconds = get_remaining_seconds(x)
 
-                if remaining_seconds < 30:
-                    continue
+                if remaining_seconds >=31 and remaining_seconds <= 90:
+                    value = 1
                 elif remaining_seconds >= 91 and remaining_seconds <= 150:
                     value = 2
                 elif remaining_seconds >= 151 and remaining_seconds <= 210:
@@ -106,12 +102,6 @@ while True:
                     print("Error placing trade:")
     #downtrend
     elif (current_price <= ema) :
-        result, order_id = API.buy(amount, "EURUSD", "put" , value)
-        if result:
-            print("CALL Trade placed successfully at : ",now )
-            trade_placed = True
-        else:
-            print("Error placing trade:")
         elapsed_time = time.time() - start_time
         status = f"Down-Running... - {elapsed_time:.2f}s"
         print(status, end="\r")
@@ -133,8 +123,8 @@ while True:
                   return remaining_seconds
                 remaining_seconds = get_remaining_seconds(x)
 
-                if remaining_seconds < 30:
-                    continue
+                if remaining_seconds >=31 and remaining_seconds <= 90:
+                    value = 1
                 elif remaining_seconds >= 91 and remaining_seconds <= 150:
                     value = 2
                 elif remaining_seconds >= 151 and remaining_seconds <= 210:
@@ -153,21 +143,28 @@ while True:
                 else:
                     print("Error placing trade:")
     if trade_placed and time.time() > now + remaining_seconds:
-       
+    
         trade_result = API.check_win_v3(order_id)
         balance_after = I_want_money.get_balance()
         if (balance_after > balance_before):
           profit_result = profit_result+1
           print("Win")
+          trade_placed = False
+         # balance_before = I_want_money.get_balance()
+          print(balance_before,",",balance_after)
         elif (balance_after < balance_before):
           loss_result = loss_result + 1
           print("Loss")
-        if trade_result == "win":
-            print("Trade won!")
-        elif trade_result == "loose":
-            print("Trade lost.")
-        else:
-            print("Trade result unknown.")
-       
-        trade_placed = False
+          trade_placed = False
+         # balance_before = I_want_money.get_balance()
+          print(balance_before,",",balance_after)
+        else :
+          print("Result Unknown")
+          trade_placed = False
+         # balance_before = I_want_money.get_balance()
+          print(balance_before,",",balance_after)
+        balance_before = I_want_money.get_balance()
+        
+    if loss_result > 2:
+        sys.exit()
     time.sleep(0.5)
