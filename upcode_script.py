@@ -86,7 +86,8 @@ while True:
     if (current_price > ema) :
         bot_seconds = get_remaining_seconds(5)
         if 28<bot_seconds<29:
-            telegram_bot_sendtext()
+            elapsed_time = time.time() - start_time
+            telegram_bot_sendtext(elapsed_time)
         candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
         df = pd.DataFrame(candles)        
@@ -124,7 +125,8 @@ while True:
     elif (current_price <= ema) :
         bot_seconds = get_remaining_seconds(15)
         if 28<bot_seconds<29:
-            telegram_bot_sendtext()
+            elapsed_time = time.time() - start_time
+            telegram_bot_sendtext(elapsed_time)
         candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
         df = pd.DataFrame(candles)        
