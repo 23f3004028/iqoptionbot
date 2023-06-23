@@ -15,7 +15,7 @@ i=6369877.269
 telegram_bot_sendtext(i)
 start_time=time.time()
 while True:
-    bot_seconds = 27
+        bot_seconds = 27
         if 25<bot_seconds<28:
             elapsed_time = time.time() - start_time
             if elapsed_time<60:
