@@ -1,7 +1,7 @@
 from iqoptionapi.stable_api import IQ_Option
-import logging      
+import logging
 import pandas as pd
-from tradingview_ta import TA_Handler, Interval, Exchange   
+from tradingview_ta import TA_Handler, Interval, Exchange
 import iqoptionapi
 import tradingview_ta
 import time
@@ -12,9 +12,10 @@ def telegram_bot_sendtext(bot_message):
     bot_token = '6283203048:AAGgOl-o6Itm3D1mw4_Omcf-g4t260vixN8'
     bot_chatID = '1155462778'
     send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + \
-                '&parse_mode=MarkdownV2&text=' + str(bot_message)  # Convert i to a string
+                '&parse_mode=MarkdownV2&text=' + str(bot_message).replace('.', '\\.')  # Escape the dot character
     response = requests.get(send_text)
     return response.json()
+
 
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
 I_want_money=IQ_Option("arishisgay@gay.com","arishisgay@gay.com")
@@ -58,7 +59,6 @@ handler = TA_Handler(
     interval="5m",
     timeout=None
 )
-telegram_bot_sendtext(balance_before)
 start_time = time.time()
 
 def get_remaining_seconds(x):
@@ -71,14 +71,25 @@ while True:
     analysis = handler.get_analysis()
     ema = analysis.indicators["EMA100"]
     if (current_price > ema) :
-        bot_seconds = get_remaining_seconds(5)
-        if 28<bot_seconds<29:
+        bot_seconds = get_remaining_seconds(30)
+        if 25<bot_seconds<28:
             elapsed_time = time.time() - start_time
-            status = f"UP-Running... - {elapsed_time:.2f}s"
-            telegram_bot_sendtext(status)
+            if elapsed_time<60:
+              status = f"UP Running...  {elapsed_time:.2f}s"
+              telegram_bot_sendtext(status)
+            elif 60 < elapsed_time < 3600:
+              min = elapsed_time // 60
+              status = f"UP Running...  {min:.2f} min"
+              telegram_bot_sendtext(status)
+            elif 3600 < elapsed_time < 86400 :
+              hours = elapsed_time // 3600
+              mins = (elapsed_time-hours*3600)//60
+              status = f"UP Running...  {hours:.2f} hr {mins:.2f} min"
+              telegram_bot_sendtext(status)
+           
         candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
-        df = pd.DataFrame(candles)        
+        df = pd.DataFrame(candles)
         df['sma'] = df['close'].rolling(window=bollinger_length).mean()
         df['std_dev'] = df['close'].rolling(window=bollinger_length).std()
         df['lower_band'] = df['sma'] - bollinger_deviation * df['std_dev']
@@ -102,7 +113,7 @@ while True:
                     value = 5
                 else:
                     continue
-                
+
                 result, order_id = API.buy(amount, "EURUSD", direction, value)
                 if result:
                     telegram_bot_sendtext("CALL Trade placed successfully " )
@@ -111,14 +122,24 @@ while True:
                     telegram_bot_sendtext("Error placing trade:")
 
     elif (current_price <= ema) :
-        bot_seconds = get_remaining_seconds(5)
-        if 28<bot_seconds<29:
+        bot_seconds = get_remaining_seconds(30)
+        if 25<bot_seconds<28:
             elapsed_time = time.time() - start_time
-            status = f"DOWN-Running... - {elapsed_time:.2f}s"
-            telegram_bot_sendtext(status)
+            if elapsed_time<60:
+              status = f"DOWN Running...  {elapsed_time:.2f}s"
+              telegram_bot_sendtext(status)
+            elif 60 < elapsed_time < 3600:
+              min = elapsed_time // 60
+              status = f"DOWN Running...  {min:.2f} min"
+              telegram_bot_sendtext(status)
+            elif 3600 < elapsed_time < 86400 :
+              hours = elapsed_time // 3600
+              mins = (elapsed_time-hours*3600)//60
+              status = f"DOWN Running...  {hours:.2f} hr {mins:.2f} mins"
+              telegram_bot_sendtext(status)
         candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
-        df = pd.DataFrame(candles)        
+        df = pd.DataFrame(candles)
         df['sma'] = df['close'].rolling(window=bollinger_length).mean()
         df['std_dev'] = df['close'].rolling(window=bollinger_length).std()
         df['upper_band'] = df['sma'] + bollinger_deviation * df['std_dev']
@@ -140,7 +161,7 @@ while True:
                     value = 5
                 else:
                     continue
-               
+
                 result, order_id = API.buy(amount, "EURUSD", direction, value)
                 if result:
                     telegram_bot_sendtext("PUT Trade placed successfully")
@@ -148,7 +169,7 @@ while True:
                 else:
                     telegram_bot_sendtext("Error placing trade:")
     if trade_placed and time.time() > now + remaining_seconds:
-    
+
         trade_result = API.check_win_v3(order_id)
         balance_after = I_want_money.get_balance()
         if (balance_after > balance_before):
@@ -156,20 +177,20 @@ while True:
           telegram_bot_sendtext("Win")
           trade_placed = False
          # balance_before = I_want_money.get_balance()
-          
+
         elif (balance_after < balance_before):
           loss_result = loss_result + 1
           telegram_bot_sendtext("Loss")
           trade_placed = False
          # balance_before = I_want_money.get_balance()
-          
+
         else :
           telegram_bot_sendtext("Result Unknown")
           trade_placed = False
          # balance_before = I_want_money.get_balance()
-          
+
         balance_before = I_want_money.get_balance()
-        
+
     if loss_result > 2:
         sys.exit()
     time.sleep(0.5)
