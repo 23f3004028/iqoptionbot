@@ -1,3 +1,5 @@
+import telegram
+from telegram.ext import Updater
 from iqoptionapi.stable_api import IQ_Option
 import logging      
 import pandas as pd
@@ -21,6 +23,11 @@ I_want_money.get_server_timestamp()
 I_want_money.change_balance(MODE)
                         #MODE: "PRACTICE"/"REAL
 I_want_money.get_balance()
+telegram_token = "6283203048:AAGgOl-o6Itm3D1mw4_Omcf-g4t260vixN8"
+bot = telegram.Bot(token=telegram_token)
+def send_status_message(message):
+    chat_id = "1155462778"
+    bot.send_message(chat_id=chat_id, text=message)
 
 API = IQ_Option("arishisgay@gay.com", "arishisgay@gay.com")
 check, reason = API.connect()
@@ -49,7 +56,7 @@ handler = TA_Handler(
     interval="5m",
     timeout=None
 )
-print(bollinger_length,bollinger_deviation,amount)
+send_status_message(balance_before)
 start_time = time.time()
 i = 1
 while True:
