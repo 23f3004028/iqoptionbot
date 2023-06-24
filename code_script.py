@@ -33,7 +33,7 @@ I_want_money.get_balance()
 API = IQ_Option("dharshan.cs05@gmail.com", "It'smecsd050402")
 check, reason = API.connect()
 if not check:
-    print("Connection failed. Reason: {}".format(reason))
+    telegram_bot_sendtext("Connection failed")
     exit()
 telegram_bot_sendtext("Connection successful")
 k = I_want_money.get_balance()
@@ -59,7 +59,11 @@ handler = TA_Handler(
     timeout=None
 )
 start_time = time.time()
-i = 1
+def get_remaining_seconds(x):
+    current_time = time.localtime()
+    current_minute = current_time.tm_min
+    remaining_seconds = (x - (current_minute % x)) * 60 - current_time.tm_sec
+    return remaining_seconds
 while True:
     current_price = API.get_candles("EURUSD", 60 * x, 1, time.time())[0]["close"]
     analysis = handler.get_analysis()
@@ -82,11 +86,6 @@ while True:
             if not trade_placed:
                 direction = "call"
                 now = time.time()
-                def get_remaining_seconds(x):
-                  current_time = time.localtime()
-                  current_minute = current_time.tm_min
-                  remaining_seconds = (x - (current_minute % x)) * 60 - current_time.tm_sec
-                  return remaining_seconds
                 remaining_seconds = get_remaining_seconds(x)
 
                 if remaining_seconds >=31 and remaining_seconds <= 90:
@@ -124,11 +123,6 @@ while True:
             if not trade_placed:
                 direction = "put"
                 now = time.time()
-                def get_remaining_seconds(x):
-                  current_time = time.localtime()
-                  current_minute = current_time.tm_min
-                  remaining_seconds = (x - (current_minute % x)) * 60 - current_time.tm_sec
-                  return remaining_seconds
                 remaining_seconds = get_remaining_seconds(x)
 
                 if remaining_seconds >=31 and remaining_seconds <= 90:
@@ -159,18 +153,18 @@ while True:
           print("Win")
           trade_placed = False
          # balance_before = I_want_money.get_balance()
-          print(balance_before,",",balance_after)
+          #print(balance_before,",",balance_after)
         elif (balance_after < balance_before):
           loss_result = loss_result + 1
           print("Loss")
           trade_placed = False
          # balance_before = I_want_money.get_balance()
-          print(balance_before,",",balance_after)
+          #print(balance_before,",",balance_after)
         else :
           print("Result Unknown")
           trade_placed = False
          # balance_before = I_want_money.get_balance()
-          print(balance_before,",",balance_after)
+          #print(balance_before,",",balance_after)
         balance_before = I_want_money.get_balance()
         
     if loss_result > 2:
