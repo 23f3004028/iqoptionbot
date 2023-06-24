@@ -71,7 +71,22 @@ while True:
     #Uptrend
     # if (current_price > ema) and profit_result<30 and loss_result<1 :
     if (current_price > ema) :
-        
+        bot_seconds = get_remaining_seconds(30)
+        if 25<bot_seconds<28:
+            elapsed_time = time.time() - start_time
+            if elapsed_time<60:
+              status = f"UP Running...  {elapsed_time:.2f}s"
+              telegram_bot_sendtext(status)
+            elif 60 < elapsed_time < 3600:
+              min = elapsed_time // 60
+              status = f"UP Running...  {min:.2f} min"
+              telegram_bot_sendtext(status)
+            elif 3600 < elapsed_time < 86400 :
+              hours = elapsed_time // 3600
+              mins = (elapsed_time-hours*3600)//60
+              status = f"UP Running...  {hours:.2f} hr {mins:.2f} min"
+              telegram_bot_sendtext(status)
+           
         candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
         df = pd.DataFrame(candles)        
@@ -107,7 +122,22 @@ while True:
                     telegram_bot_sendtext("Error placing trade")
     #downtrend
     elif (current_price <= ema) :
-        
+        bot_seconds = get_remaining_seconds(30)
+        if 25<bot_seconds<28:
+            elapsed_time = time.time() - start_time
+            if elapsed_time<60:
+              status = f"DOWN Running...  {elapsed_time:.2f}s"
+              telegram_bot_sendtext(status)
+            elif 60 < elapsed_time < 3600:
+              min = elapsed_time // 60
+              status = f"DOWN Running...  {min:.2f} min"
+              telegram_bot_sendtext(status)
+            elif 3600 < elapsed_time < 86400 :
+              hours = elapsed_time // 3600
+              mins = (elapsed_time-hours*3600)//60
+              status = f"DOWN Running...  {hours:.2f} hr {mins:.2f} min"
+              telegram_bot_sendtext(status)
+           
         candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
         df = pd.DataFrame(candles)        
