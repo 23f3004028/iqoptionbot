@@ -1,4 +1,4 @@
-gitfrom iqoptionapi.stable_api import IQ_Option
+from iqoptionapi.stable_api import IQ_Option
 import logging
 import pandas as pd
 from tradingview_ta import TA_Handler, Interval, Exchange
@@ -190,7 +190,4 @@ while True:
          # balance_before = I_want_money.get_balance()
 
         balance_before = I_want_money.get_balance()
-
-    if loss_result > 2:
-        sys.exit()
     time.sleep(0.5)
