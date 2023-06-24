@@ -71,9 +71,7 @@ while True:
     #Uptrend
     # if (current_price > ema) and profit_result<30 and loss_result<1 :
     if (current_price > ema) :
-        elapsed_time = time.time() - start_time
-        status = f"UP-Running... - {elapsed_time:.2f}s"
-        print(status, end="\r")
+        
         candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
         df = pd.DataFrame(candles)        
@@ -103,15 +101,13 @@ while True:
                 
                 result, order_id = API.buy(amount, "EURUSD", direction, value)
                 if result:
-                    print("CALL Trade placed successfully at : ",now )
+                    telegram_bot_sendtext("CALL Trade placed successfully" )
                     trade_placed = True
                 else:
-                    print("Error placing trade:")
+                    telegram_bot_sendtext("Error placing trade")
     #downtrend
     elif (current_price <= ema) :
-        elapsed_time = time.time() - start_time
-        status = f"Down-Running... - {elapsed_time:.2f}s"
-        print(status, end="\r")
+        
         candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
         df = pd.DataFrame(candles)        
@@ -140,28 +136,28 @@ while True:
                
                 result, order_id = API.buy(amount, "EURUSD", direction, value)
                 if result:
-                    print("PUT Trade placed successfully at :",now)
+                    telegram_bot_sendtext("PUT Trade placed successfully")
                     trade_placed = True
                 else:
-                    print("Error placing trade:")
+                    telegram_bot_sendtext("Error placing trade")
     if trade_placed and time.time() > now + remaining_seconds:
     
         trade_result = API.check_win_v3(order_id)
         balance_after = I_want_money.get_balance()
         if (balance_after > balance_before):
           profit_result = profit_result+1
-          print("Win")
+          telegram_bot_sendtext("Win")
           trade_placed = False
          # balance_before = I_want_money.get_balance()
           #print(balance_before,",",balance_after)
         elif (balance_after < balance_before):
           loss_result = loss_result + 1
-          print("Loss")
+          telegram_bot_sendtext("Loss")
           trade_placed = False
          # balance_before = I_want_money.get_balance()
           #print(balance_before,",",balance_after)
         else :
-          print("Result Unknown")
+          telegram_bot_sendtext("Result Unknown")
           trade_placed = False
          # balance_before = I_want_money.get_balance()
           #print(balance_before,",",balance_after)
