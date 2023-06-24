@@ -1,4 +1,4 @@
-from iqoptionapi.stable_api import IQ_Option
+#from iqoptionapi.stable_api import IQ_Option
 import logging      
 import pandas as pd
 from tradingview_ta import TA_Handler, Interval, Exchange   
@@ -24,7 +24,6 @@ cookie={"I_want_money":"GOOD"}
 MODE="REAL"
 I_want_money.set_session(header,cookie)
 I_want_money.connect()#connect to iqoption
-print(I_want_money.check_connect())
 I_want_money.connect()
 I_want_money.get_server_timestamp()
 I_want_money.change_balance(MODE)
@@ -36,9 +35,10 @@ check, reason = API.connect()
 if not check:
     print("Connection failed. Reason: {}".format(reason))
     exit()
-print("Connection successful")
+telegram_bot_sendtext("Connection successful")
 k = I_want_money.get_balance()
-print(k)
+telegram_bot_sendtext(k)
+
 #parameters
 bollinger_length = 27
 bollinger_deviation = 2.4
@@ -58,7 +58,6 @@ handler = TA_Handler(
     interval="5m",
     timeout=None
 )
-print(bollinger_length,bollinger_deviation,amount)
 start_time = time.time()
 i = 1
 while True:
