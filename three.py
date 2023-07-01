@@ -1,5 +1,4 @@
-
-gitfrom iqoptionapi.stable_api import IQ_Option
+from iqoptionapi.stable_api import IQ_Option
 import logging
 import pandas as pd
 from tradingview_ta import TA_Handler, Interval, Exchange
