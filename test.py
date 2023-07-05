@@ -16,7 +16,7 @@ def telegram_bot_sendtext(bot_message):
 
 
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
-I_want_money=IQ_Option("twotest@twotest.com","twotest@twotest.com")
+I_want_money=IQ_Option("twopointthree@gmail.com","twopointthree@gmail.com")
 #Default is "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36"
 header={"User-Agent":r"Mozilla/5.0 (X11; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0"}
 cookie={"I_want_money":"GOOD"}
@@ -30,7 +30,7 @@ I_want_money.change_balance(MODE)
                         #MODE: "PRACTICE"/"REAL"
 I_want_money.get_balance()
 
-API = IQ_Option("twotest@twotest.com", "twotest@twotest.com")
+API = IQ_Option("twopointthree@gmail.com", "twopointthree@gmail.com")
 check, reason = API.connect()
 if not check:
     telegram_bot_sendtext("Connection failed.")
@@ -46,6 +46,7 @@ HMA1_length = 20
 HMA2_length = 25
 x = 5
 trade_placed = False
+amount = 1
 
 start_time = time.time()
 
@@ -145,27 +146,27 @@ while True:
                     trade_placed = True
                 else:
                     telegram_bot_sendtext("Error placing trade:")
-    if trade_placed and time.time() > now + remaining_seconds:
+        if trade_placed and time.time() > now + remaining_seconds:
 
-        trade_result = API.check_win_v3(order_id)
-        balance_after = I_want_money.get_balance()
-        if (balance_after > balance_before):
-          profit_result = profit_result+1
-          telegram_bot_sendtext("Win")
-          trade_placed = False
-         # balance_before = I_want_money.get_balance()
+            trade_result = API.check_win_v3(order_id)
+            balance_after = I_want_money.get_balance()
+            if (balance_after > balance_before):
+              profit_result = profit_result+1
+              telegram_bot_sendtext("Win")
+              trade_placed = False
+            # balance_before = I_want_money.get_balance()
 
-        elif (balance_after < balance_before):
-          loss_result = loss_result + 1
-          telegram_bot_sendtext("Loss")
-          trade_placed = False
-         # balance_before = I_want_money.get_balance()
+            elif (balance_after < balance_before):
+              loss_result = loss_result + 1
+              telegram_bot_sendtext("Loss")
+              trade_placed = False
+            # balance_before = I_want_money.get_balance()
 
-        else :
-          telegram_bot_sendtext("Result Unknown")
-          trade_placed = False
-         # balance_before = I_want_money.get_balance()
+            else :
+              telegram_bot_sendtext("Result Unknown")
+              trade_placed = False
+            # balance_before = I_want_money.get_balance()
 
-        balance_before = I_want_money.get_balance()
-    time.sleep(0.5)
+            balance_before = I_want_money.get_balance()
+        time.sleep(0.5)
     
