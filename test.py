@@ -55,10 +55,7 @@ def get_remaining_seconds(x):
     remaining_seconds = (x - (current_minute % x)) * 60 - current_time.tm_sec
     return remaining_seconds
 while True:
-    current_price = API.get_candles("EURUSD-OTC", 60 * x, 1, time.time())[0]["close"]
-    analysis = handler.get_analysis()
-    ema = analysis.indicators["EMA100"]
-    if (current_price > ema) :
+        current_price = API.get_candles("EURUSD", 60 * x, 1, time.time())[0]["close"]
         bot_seconds = get_remaining_seconds(30)
         if 25<bot_seconds<28:
             elapsed_time = time.time() - start_time
@@ -75,12 +72,27 @@ while True:
               status = f"UP Running...  {hours:.2f} hr {mins:.2f} min"
               telegram_bot_sendtext(status)
            
-        candles = API.get_candles("EURUSD-OTC", 60 * x, 100, time.time())
+        candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
         df = pd.DataFrame(candles)
-        df['sma'] = df['close'].rolling(window=bollinger_length).mean()
+        df['wma_half_length'] = df['close'].rolling(window=HMA1_length // 2).mean()
+        df['wma_full_length'] = df['close'].rolling(window=HMA1_length).mean()
+        df['diff'] = 2 * df['wma_half_length'] - df['wma_full_length']
+        df['hma'] = df['diff'].rolling(window=int(HMA1_length ** 0.5)).mean()
+
+        df['ema'] = df['close'].ewm(span=EMA_length, adjust=False).mean()
+
+        df['wma_half_length2'] = df['close'].rolling(window=HMA2_length // 2).mean()
+        df['wma_full_length2'] = df['close'].rolling(window=HMA2_length).mean()
+        df['diff2'] = 2 * df['wma_half_length2'] - df['wma_full_length2']
+        df['hma2'] = df['diff2'].rolling(window=int(HMA2_length ** 0.5)).mean()
+
+        
+        df['sma'] = (df['hma']+df['ema']+df['hma2'])/3
         df['std_dev'] = df['close'].rolling(window=bollinger_length).std()
         df['lower_band'] = df['sma'] - bollinger_deviation * df['std_dev']
+        df['upper_band'] = df['sma'] + bollinger_deviation * df['std_dev']
+        upper_band = df['upper_band'].iloc[-1]
         lower_band = df['lower_band'].iloc[-1]
         #balance_before = I_want_money.get_balance()
         if (current_price <= lower_band ) :
@@ -102,36 +114,13 @@ while True:
                 else:
                     continue
 
-                result, order_id = API.buy(amount, "EURUSD-OTC", direction, value)
+                result, order_id = API.buy(amount, "EURUSD", direction, value)
                 if result:
                     telegram_bot_sendtext("CALL Trade placed successfully " )
                     trade_placed = True
                 else:
                     telegram_bot_sendtext("Error placing trade:")
-
-    elif (current_price <= ema) :
-        bot_seconds = get_remaining_seconds(30)
-        if 25<bot_seconds<28:
-            elapsed_time = time.time() - start_time
-            if elapsed_time<60:
-              status = f"DOWN Running...  {elapsed_time:.2f}s"
-              telegram_bot_sendtext(status)
-            elif 60 < elapsed_time < 3600:
-              min = elapsed_time // 60
-              status = f"DOWN Running...  {min:.2f} min"
-              telegram_bot_sendtext(status)
-            elif 3600 < elapsed_time < 86400 :
-              hours = elapsed_time // 3600
-              mins = (elapsed_time-hours*3600)//60
-              status = f"DOWN Running...  {hours:.2f} hr {mins:.2f} mins"
-              telegram_bot_sendtext(status)
-        candles = API.get_candles("EURUSD-OTC", 60 * x, 100, time.time())
-        close_prices = [candle["close"] for candle in candles]
-        df = pd.DataFrame(candles)
-        df['sma'] = df['close'].rolling(window=bollinger_length).mean()
-        df['std_dev'] = df['close'].rolling(window=bollinger_length).std()
-        df['upper_band'] = df['sma'] + bollinger_deviation * df['std_dev']
-        upper_band = df['upper_band'].iloc[-1]
+       
         if (current_price >= upper_band ) :
             if not trade_placed:
                 direction = "put"
@@ -150,7 +139,7 @@ while True:
                 else:
                     continue
 
-                result, order_id = API.buy(amount, "EURUSD-OTC", direction, value)
+                result, order_id = API.buy(amount, "EURUSD", direction, value)
                 if result:
                     telegram_bot_sendtext("PUT Trade placed successfully")
                     trade_placed = True
