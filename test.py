@@ -6,6 +6,8 @@ import time
 import sys
 import requests
 
+
+
 def telegram_bot_sendtext(bot_message):
     bot_token = '5936883139:AAEUscW6GqEbwTyW0KZbQ3nSu_phhbytHTM'
     bot_chatID = '1155462778'
@@ -13,8 +15,15 @@ def telegram_bot_sendtext(bot_message):
                 '&parse_mode=MarkdownV2&text=' + str(bot_message).replace('.', '\\.')  # Escape the dot character
     response = requests.get(send_text)
     return response.json()
-
-
+    
+x = 5
+current_start_time = time.localtime()
+current_start_minute = current_start_time.tm_min
+remaining_start_seconds = (x - (current_start_minute % 5)) * 60 - current_start_time.tm_sec
+if remaining_start_seconds>30:
+    time.sleep(remaining_start_seconds-30)
+else:
+    comtinue
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
 I_want_money=IQ_Option("twopointthree@gmail.com","twopointthree@gmail.com")
 #Default is "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36"
@@ -44,7 +53,7 @@ bollinger_deviation = 2.4
 EMA_length = 30
 HMA1_length = 20 
 HMA2_length = 25
-x = 5
+
 trade_placed = False
 amount = 1
 
