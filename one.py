@@ -1,4 +1,4 @@
-gitfrom iqoptionapi.stable_api import IQ_Option
+from iqoptionapi.stable_api import IQ_Option
 import logging
 import pandas as pd
 from tradingview_ta import TA_Handler, Interval, Exchange
@@ -67,7 +67,7 @@ def get_remaining_seconds(x):
     remaining_seconds = (x - (current_minute % x)) * 60 - current_time.tm_sec
     return remaining_seconds
 while True:
-    current_price = API.get_candles("EURUSD-OTC", 60 * x, 1, time.time())[0]["close"]
+    current_price = API.get_candles("EURUSD", 60 * x, 1, time.time())[0]["close"]
     analysis = handler.get_analysis()
     ema = analysis.indicators["EMA100"]
     if (current_price > ema) :
@@ -87,7 +87,7 @@ while True:
               status = f"UP Running...  {hours:.2f} hr {mins:.2f} min"
               telegram_bot_sendtext(status)
            
-        candles = API.get_candles("EURUSD-OTC", 60 * x, 100, time.time())
+        candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
         df = pd.DataFrame(candles)
         df['sma'] = df['close'].rolling(window=bollinger_length).mean()
@@ -114,7 +114,7 @@ while True:
                 else:
                     continue
 
-                result, order_id = API.buy(amount, "EURUSD-OTC", direction, value)
+                result, order_id = API.buy(amount, "EURUSD", direction, value)
                 if result:
                     telegram_bot_sendtext("CALL Trade placed successfully " )
                     trade_placed = True
@@ -137,7 +137,7 @@ while True:
               mins = (elapsed_time-hours*3600)//60
               status = f"DOWN Running...  {hours:.2f} hr {mins:.2f} mins"
               telegram_bot_sendtext(status)
-        candles = API.get_candles("EURUSD-OTC", 60 * x, 100, time.time())
+        candles = API.get_candles("EURUSD", 60 * x, 100, time.time())
         close_prices = [candle["close"] for candle in candles]
         df = pd.DataFrame(candles)
         df['sma'] = df['close'].rolling(window=bollinger_length).mean()
@@ -162,7 +162,7 @@ while True:
                 else:
                     continue
 
-                result, order_id = API.buy(amount, "EURUSD-OTC", direction, value)
+                result, order_id = API.buy(amount, "EURUSD", direction, value)
                 if result:
                     telegram_bot_sendtext("PUT Trade placed successfully")
                     trade_placed = True
