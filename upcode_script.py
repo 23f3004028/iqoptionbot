@@ -16,13 +16,19 @@ def telegram_bot_sendtext(bot_message):
     response = requests.get(send_text)
     return response.json()
 
+def get_remaining_seconds(x):
+    current_time = time.localtime()
+    current_minute = current_time.tm_min
+    remaining_seconds = (x - (current_minute % x)) * 60 - current_time.tm_sec
+    return remaining_seconds
+
 
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
 I_want_money=IQ_Option("arishisgay@gay.com","arishisgay@gay.com")
 #Default is "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36"
 header={"User-Agent":r"Mozilla/5.0 (X11; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0"}
 cookie={"I_want_money":"GOOD"}
-MODE="PRACTICE"
+MODE="PRACTISE"
 I_want_money.set_session(header,cookie)
 I_want_money.connect()#connect to iqoption
 #print(I_want_money.check_connect())
@@ -40,17 +46,14 @@ if not check:
 telegram_bot_sendtext("Connection successful")
 k = I_want_money.get_balance()
 telegram_bot_sendtext(k)
+
 #parameters
 bollinger_length = 27
 bollinger_deviation = 2.4
-x = 5
-amount = 1
+amount = 2
 direction = ""
-balance_before = I_want_money.get_balance()
-balance_after = I_want_money.get_balance()
-profit_result = 0
-loss_result = 0
 trade_placed = False
+
 #EmaHandler
 handler = TA_Handler(
     symbol="EURUSD",
@@ -59,20 +62,16 @@ handler = TA_Handler(
     interval="5m",
     timeout=None
 )
+
 start_time = time.time()
 
-def get_remaining_seconds(x):
-    current_time = time.localtime()
-    current_minute = current_time.tm_min
-    remaining_seconds = (x - (current_minute % x)) * 60 - current_time.tm_sec
-    return remaining_seconds
 while True:
     current_price = API.get_candles("EURUSD", 60 * x, 1, time.time())[0]["close"]
     analysis = handler.get_analysis()
     ema = analysis.indicators["EMA100"]
     if (current_price > ema) :
         bot_seconds = get_remaining_seconds(30)
-        if 25<bot_seconds<28:
+        if 26<bot_seconds<27:
             elapsed_time = time.time() - start_time
             if elapsed_time<60:
               status = f"UP Running...  {elapsed_time:.2f}s"
@@ -123,7 +122,7 @@ while True:
 
     elif (current_price <= ema) :
         bot_seconds = get_remaining_seconds(30)
-        if 25<bot_seconds<28:
+        if 26<bot_seconds<27:
             elapsed_time = time.time() - start_time
             if elapsed_time<60:
               status = f"DOWN Running...  {elapsed_time:.2f}s"
@@ -169,28 +168,6 @@ while True:
                 else:
                     telegram_bot_sendtext("Error placing trade:")
     if trade_placed and time.time() > now + remaining_seconds:
-
-        trade_result = API.check_win_v3(order_id)
-        balance_after = I_want_money.get_balance()
-        if (balance_after > balance_before):
-          profit_result = profit_result+1
-          telegram_bot_sendtext("Win")
-          trade_placed = False
-         # balance_before = I_want_money.get_balance()
-
-        elif (balance_after < balance_before):
-          loss_result = loss_result + 1
-          telegram_bot_sendtext("Loss")
-          trade_placed = False
-         # balance_before = I_want_money.get_balance()
-
-        else :
-          telegram_bot_sendtext("Result Unknown")
-          trade_placed = False
-         # balance_before = I_want_money.get_balance()
-
-        balance_before = I_want_money.get_balance()
-
-    if loss_result > 2:
-        sys.exit()
-    time.sleep(0.5)
+        trade_placed = False
+        
+    time.sleep(0.1)
