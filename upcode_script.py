@@ -22,6 +22,13 @@ def get_remaining_seconds(x):
     remaining_seconds = (x - (current_minute % x)) * 60 - current_time.tm_sec
     return remaining_seconds
 
+x = 5
+current_start_time = time.localtime()
+current_start_minute = current_start_time.tm_min
+remaining_start_seconds = (x - (current_start_minute % 5)) * 60 - current_start_time.tm_sec
+z=remaining_start_seconds-30
+if remaining_start_seconds>30:
+  time.sleep(z)
 
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
 I_want_money=IQ_Option("arishisgay@gay.com","arishisgay@gay.com")
