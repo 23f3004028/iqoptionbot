@@ -16,6 +16,19 @@ def telegram_bot_sendtext(bot_message):
     response = requests.get(send_text)
     return response.json()
 
+def get_remaining_seconds(x):
+    current_time = time.localtime()
+    current_minute = current_time.tm_min
+    remaining_seconds = (x - (current_minute % x)) * 60 - current_time.tm_sec
+    return remaining_seconds
+
+x = 5
+current_start_time = time.localtime()
+current_start_minute = current_start_time.tm_min
+remaining_start_seconds = (x - (current_start_minute % 5)) * 60 - current_start_time.tm_sec
+z=remaining_start_seconds-30
+if remaining_start_seconds>30:
+  time.sleep(z)
 
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
 I_want_money=IQ_Option("onetest@onetest.com","onetest@onetest.com")
@@ -43,7 +56,6 @@ telegram_bot_sendtext(k)
 #parameters
 bollinger_length = 27
 bollinger_deviation = 2.4
-x = 5
 amount = 1
 direction = ""
 balance_before = I_want_money.get_balance()
@@ -61,11 +73,6 @@ handler = TA_Handler(
 )
 start_time = time.time()
 
-def get_remaining_seconds(x):
-    current_time = time.localtime()
-    current_minute = current_time.tm_min
-    remaining_seconds = (x - (current_minute % x)) * 60 - current_time.tm_sec
-    return remaining_seconds
 while True:
     current_price = API.get_candles("EURUSD", 60 * x, 1, time.time())[0]["close"]
     analysis = handler.get_analysis()
