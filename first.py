@@ -9,6 +9,8 @@ commands = [
     'python setup.py install',
     'pip install iqoptionapi --upgrade',
     'pip install pandas',
+    'pip install numpy',
+    'pip install python-math'
 ]
 
 for command in commands:
