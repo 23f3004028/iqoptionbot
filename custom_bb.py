@@ -9,7 +9,7 @@ import numpy as np
 import math
 
 def telegram_bot_sendtext(bot_message):
-    bot_token = '5936883139:AAEUscW6GqEbwTyW0KZbQ3nSu_phhbytHTM'
+    bot_token = '6099125962:AAFMqpPyiL902Dg9ySrRtfnysILH5M_YMr4'
     bot_chatID = '1155462778'
     send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + \
                 '&parse_mode=MarkdownV2&text=' + str(bot_message).replace('.', '\\.')  # Escape the dot character
@@ -29,17 +29,17 @@ def calculate_wma(data, window):
     wma = data.rolling(int_window).apply(lambda x: np.dot(x, weights) / weights.sum(), raw=True)
     return wma
 
-x = 5
+y = 5
 current_start_time = time.localtime()
 current_start_minute = current_start_time.tm_min
-remaining_start_seconds = (x - (current_start_minute % 5)) * 60 - current_start_time.tm_sec
+remaining_start_seconds = (y - (current_start_minute % 5)) * 60 - current_start_time.tm_sec
 z=remaining_start_seconds-30
 if remaining_start_seconds>30:
   time.sleep(z)
 
 
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
-I_want_money=IQ_Option("twopointthree@gmail.com","twopointthree@gmail.com")
+I_want_money=IQ_Option("custom_bb2@gmail.com","custom_bb2@gmail.com")
 #Default is "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36"
 header={"User-Agent":r"Mozilla/5.0 (X11; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0"}
 cookie={"I_want_money":"GOOD"}
@@ -53,7 +53,7 @@ I_want_money.change_balance(MODE)
                         #MODE: "PRACTICE"/"REAL"
 I_want_money.get_balance()
 
-API = IQ_Option("twopointthree@gmail.com", "twopointthree@gmail.com")
+API = IQ_Option("custom_bb2@gmail.com", "custom_bb2@gmail.com")
 check, reason = API.connect()
 if not check:
     telegram_bot_sendtext("Connection failed.")
@@ -62,13 +62,14 @@ telegram_bot_sendtext("Connection successful")
 k = I_want_money.get_balance()
 telegram_bot_sendtext(k)
 #parameters
-bollinger_length = 20  #std length
-bollinger_deviation = 2.4
-EMA_length = 30
+bollinger_length = 15  #std length and default 20
+bollinger_deviation = 3
+EMA_length = 30 #default 2.4
 window = 20 #HMA1_length
 window1 = 25 #HMA2_length
 trade_placed = False
 amount = 1
+x = 5
 
 start_time = time.time()
 
@@ -117,21 +118,7 @@ while True:
             if not trade_placed:
                 direction = "call"
                 now = time.time()
-                remaining_seconds = get_remaining_seconds(x)
-
-                if remaining_seconds >=31 and remaining_seconds <= 90:
-                    value = 1
-                elif remaining_seconds >= 91 and remaining_seconds <= 150:
-                    value = 2
-                elif remaining_seconds >= 151 and remaining_seconds <= 210:
-                    value = 3
-                elif remaining_seconds >= 211 and remaining_seconds <= 270:
-                    value = 4
-                elif remaining_seconds >= 271 and remaining_seconds <= 330:
-                    value = 5
-                else:
-                    continue
-
+                value = 6
                 result, order_id = API.buy(amount, "EURUSD-OTC", direction, value)
                 if result:
                     telegram_bot_sendtext("CALL Trade placed successfully " )
@@ -143,20 +130,7 @@ while True:
             if not trade_placed:
                 direction = "put"
                 now = time.time()
-                remaining_seconds = get_remaining_seconds(x)
-                if remaining_seconds >=31 and remaining_seconds <= 90:
-                    value = 1
-                elif remaining_seconds >= 91 and remaining_seconds <= 150:
-                    value = 2
-                elif remaining_seconds >= 151 and remaining_seconds <= 210:
-                    value = 3
-                elif remaining_seconds >= 211 and remaining_seconds <= 270:
-                    value = 4
-                elif remaining_seconds >= 271 and remaining_seconds <= 330:
-                    value = 5
-                else:
-                    continue
-
+                value = 6
                 result, order_id = API.buy(amount, "EURUSD-OTC", direction, value)
                 if result:
                     telegram_bot_sendtext("PUT Trade placed successfully")
